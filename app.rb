@@ -12,38 +12,52 @@ end
 class Comment < ActiveRecord::Base
 end
 
+before do
+	@posts = Post.order 'created_at DESC'
+	@comments = Comment.order 'created_at DESC'
+end
+
 get '/' do
-	
-	@results = @db.execute 'select * from Posts order by id desc'
-	
 	erb :index			
 end
 
 get '/new' do
+	@p = Post.new
 	erb :new
 end
 
 post '/new' do
-	content = params[:content]
-	username = params[:username]
+	@p = Post.new params[:post]
 
-	@db.execute 'insert into Posts (content, username, created_date) values (?, ?, datetime());', [content, username]
+	if @p.save
+		erb "<h2>Thanx!</h2>"
+	else
+		@error = @p.errors.full_messages.first
+		erb :new
+	end
 
 	redirect to '/'
-	erb "You typed: -- #{content} --"
+	erb "You typed: -- #{post[content]} --"
 end
 
-get '/details/:post_id' do
-	post_id = params[:post_id]
-
+get '/details/:id' do
+	@post_id = params[:id]
+  	@post = Post.find(@post_id)
 	erb :details
 end
 
-post '/details/:post_id' do
-	post_id = params[:post_id]
-	comment = params[:comment]
-
-	@db.execute 'insert into Comments (comment, created_date, post_id) values (?, datetime(), ?);', [comment, post_id]
-
-	redirect to ('/details/' + post_id)
+post '/details/:id' do
+	@post_id = params[:id]
+	@post = Post.find(@post_id)
+	  
+	@c = Comment.new params[:commentos]
+	if @c.save
+		erb "<h2>Thanx!</h2>"
+	else
+		@error = @c.errors.full_messages.first
+		erb :details
+	end
+	
+	redirect to ('/details/' + @post_id)
+	
 end

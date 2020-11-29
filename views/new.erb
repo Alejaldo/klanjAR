@@ -1,10 +1,10 @@
 <h2>Add new post</h2>
 <p>
     <form action="/new" method="POST" role="form">
-        <textarea name="content" class="form-control" style="width: 400px" rows="6" placeholder="What an argument!"></textarea>
+        <textarea name="post[content]" class="form-control" style="width: 400px" rows="6" placeholder="What an argument!"></textarea>
         </br>
         Your Name
-        <textarea name="username" class="form-control" style="width: 400px" rows="1" placeholder="Your Name"></textarea>
+        <textarea name="post[username]" class="form-control" style="width: 400px" rows="1" placeholder="Your Name"></textarea>
         </br>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
