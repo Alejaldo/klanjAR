@@ -6,8 +6,10 @@ require 'sinatra/activerecord'
 
 set :database, {adapter: "sqlite3", database: "berl.db"}
 
-before do
-	init_db
+class Post < ActiveRecord::Base
+end
+
+class Comment < ActiveRecord::Base
 end
 
 get '/' do
