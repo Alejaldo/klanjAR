@@ -12,12 +12,8 @@ end
 class Comment < ActiveRecord::Base
 end
 
-before do
-	@posts = Post.order 'created_at DESC'
-	@comments = Comment.order 'created_at DESC'
-end
-
 get '/' do
+	@posts = Post.order 'created_at DESC'
 	erb :index			
 end
 
@@ -40,17 +36,27 @@ post '/new' do
 	erb "You typed: -- #{post[content]} --"
 end
 
-get '/details/:id' do
-	@post_id = params[:id]
-  	@post = Post.find(@post_id)
+get '/details/:post_id' do
+	post_id = params[:post_id]
+
+	results = Post.where(id: post_id)
+	@row = results[0]
+	
+	@comments = Comment.where(post_id: post_id.to_i).order(id: :desc)
+
 	erb :details
 end
 
-post '/details/:id' do
-	@post_id = params[:id]
-	@post = Post.find(@post_id)
-	  
+post '/details/:post_id' do
+	post_id = params[:post_id]
 	@c = Comment.new params[:commentos]
+
+	results = Post.where(id: post_id)
+	@row = results[0]
+
+	@comments = Comment.where(post_id: post_id.to_i).order(id: :desc)
+	  
+	@c.post_id = post_id
 	if @c.save
 		erb "<h2>Thanx!</h2>"
 	else
@@ -58,6 +64,6 @@ post '/details/:id' do
 		erb :details
 	end
 	
-	redirect to ('/details/' + @post_id)
+	redirect to ('/details/' + post_id)
 	
 end

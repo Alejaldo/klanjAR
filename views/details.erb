@@ -1,10 +1,11 @@
 <h4>Post details:</h4>
 <br />
 <p>
-    <%= @post.content %>
+    <%= @row.content %>
     <br />
+    <%= @row.username %>
     <br />
-    Added at <%= @post.created_at %>
+    Added at <%= @row.created_at %>
     <br />
 </p>
 <br />
@@ -14,6 +15,7 @@
     <p>
         <%= commento.content %>
         <br />
+        <%= commento.username %>
         <br />
         <span style="font-size: 75%; color: #999">Added at <%= commento.created_at %></span>
     </p>
@@ -21,7 +23,8 @@
 <% end %>
 
 <p>
-    <form action="/details/<%= @post_id %>" method="POST" role="form">
+    <form action="/details/<%= @row.id %>" method="POST" role="form">
+        <input name="commentos[username]" type="text" class="form-control" placeholder="Enter your name">
         <textarea name="commentos[content]" class="form-control" style="width: 400px" rows="6" placeholder="Type text here"></textarea></br>
         <button type="submit" class="btn btn-primary">Add comment</button>
     </form>
